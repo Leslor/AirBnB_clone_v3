@@ -122,7 +122,6 @@ class TestFileStorage(unittest.TestCase):
         failTry = models.storage.get('State', 'fakeid')
         self.assertEqual(failTry, None)
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """ Pending to implement"""
         count = models.storage.count()
