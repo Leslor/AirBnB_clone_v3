@@ -114,10 +114,20 @@ class TestFileStorage(unittest.TestCase):
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
 
-    def test_get(self):
-        """ Pending to implement"""
-        pass
+        def test_get(self):
+        """ Test storage"""
+        state_obj = State(name ="Namekusei")
+        state_obj.save()
+        failTry = models.storage.get('State', 'fakeid')
+        self.assertEqual(failtry, None )
 
-    def test_count(self):
+        def test_count(self):
         """ Pending to implement"""
-        pass
+        count = models.storage.count()
+        count_class = models.storage.count('State')
+        new_state = State(name='Namekusei')
+        new_state.save()
+        new_count = models.storage.count()
+        new_count_class = models.storage.count('State')
+        self.assertEqual(count + 1, new_count)
+        self.assertEqual(count_class + 1, new_count_class)
