@@ -19,7 +19,7 @@ def status():
     state = {
         "status": "OK"
     }
-    return jsonify(state)
+    return (jsonify(state))
 
 
 @app_views.route('/stats', strict_slashes=False)
@@ -33,4 +33,4 @@ def stats():
         "states": storage.count(State),
         "users": storage.count(User),
     }
-    return jsonify(total_classes)
+    return (jsonify(total_classes))
