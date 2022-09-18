@@ -11,4 +11,4 @@ def status():
     state = {
         "status": "OK"
     }
-    return jsonify({"status": "OK"})
+    return jsonify(state)
