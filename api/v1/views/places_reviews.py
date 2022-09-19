@@ -90,7 +90,8 @@ def put_cities(review_id):
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
     for key, value in res.items():
-        if key not in ["id", "user_id", "place_id", "created_at", "updated_at"]:
+        if key not in ["id", "user_id",
+                       "place_id", "created_at", "updated_at"]:
             setattr(city, key, value)
     storage.save()
     return jsonify(city.to_dict()), 200
