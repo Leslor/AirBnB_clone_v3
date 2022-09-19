@@ -8,10 +8,8 @@ from api.v1.views import app_views
 from flask import jsonify, abort, request
 
 
-@app_views.route('/states/<state_id>/cities', methods=['GET'],
-                 strict_slashes=False)
+@app_views.route('/states/<state_id>/cities', methods=['GET'])
 def get_cities_stat_id(state_id):
-    """View function that return city objects by state"""
     city = storage.all(City).values()
     dict_ = []
     state = storage.get(State, state_id)
@@ -22,20 +20,19 @@ def get_cities_stat_id(state_id):
     return jsonify(dict_)
 
 
-@app_views.route('/cities/<city_id>', methods=['GET'],
-                 strict_slashes=False)
+@app_views.route('/cities/<city_id>', methods=['GET'])
 def get_cities(city_id):
-    """Endpoint that return a City object"""
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
     return jsonify(city.to_dict())
 
 
-@app_views.route('/cities/<city_id>', methods=['DELETE'],
+@app_views.route('cities/<city_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_cities(city_id):
-    """Endpoint that remove a City object"""
+    if city_id is None:
+        abort(404)
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
@@ -45,12 +42,11 @@ def delete_cities(city_id):
     return jsonify({})
 
 
-@app_views.route('/states/<state_id>/cities', methods=['POST'],
+@app_views.route('states/<state_id>/cities', methods=['POST'],
                  strict_slashes=False)
 def post_citie(state_id):
-    """Endpoint that insert a City object"""
     if not storage.get(State, state_id):
-        abort(404)
+        abort(400)
     res = request.get_json()
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
@@ -65,7 +61,6 @@ def post_citie(state_id):
 @app_views.route('/cities/<city_id>', methods=['PUT'],
                  strict_slashes=False)
 def put_cities(city_id):
-    """Endpoint that update a City object"""
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
