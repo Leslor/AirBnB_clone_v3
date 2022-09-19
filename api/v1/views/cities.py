@@ -2,8 +2,8 @@
 """Create a new view for State objects that handles
 all default RESTFul API actions"""
 from models import storage
-from models.city import City
 from models.state import State
+from models.city import City
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 
@@ -11,7 +11,13 @@ from flask import jsonify, abort, request
 @app_views.route('/states/<state_id>/cities', methods=['GET'],
                  strict_slashes=False)
 def get_cities_stat_id(state_id):
+<<<<<<< HEAD
     """Method that return city objects by state"""
+=======
+    """View function that return city objects by state"""
+    city = storage.all(City).values()
+    dict_ = []
+>>>>>>> f4ffb594b6983b15869dfd68f2af9a5b92b2263a
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
@@ -24,24 +30,52 @@ def get_cities_stat_id(state_id):
 @app_views.route('/cities/<city_id>', methods=['GET'],
                  strict_slashes=False)
 def get_cities(city_id):
+<<<<<<< HEAD
     """Endpoint that return a City object"""
+=======
+    """View function that return city objects by state"""
+>>>>>>> f4ffb594b6983b15869dfd68f2af9a5b92b2263a
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
     return jsonify(city.to_dict())
 
 
-@app_views.route('/cities/<city_id>', methods=['DELETE'],
+@app_views.route('/cities/<string:city_id>', methods=['DELETE'],
                  strict_slashes=False)
+<<<<<<< HEAD
 def delete_cities(city_id):
     """Endpoint that delete a City object"""
+=======
+def delete_city(city_id):
+    """Endpoint that remove a City object"""
     city = storage.get(City, city_id)
+    if city_id is None:
+        abort(404)
     if city is None:
         abort(404)
     else:
         city.delete()
         storage.save()
     return (jsonify({}), 200)
+
+
+@app_views.route('/cities/<city_id>', methods=['DELETE'],
+                 strict_slashes=False)
+def delete_cities(city_id):
+    """Endpoint that remove a City object"""
+>>>>>>> f4ffb594b6983b15869dfd68f2af9a5b92b2263a
+    city = storage.get(City, city_id)
+    if city is None:
+        abort(404)
+    else:
+        city.delete()
+        storage.save()
+<<<<<<< HEAD
+    return (jsonify({}), 200)
+=======
+    return jsonify({}), 200
+>>>>>>> f4ffb594b6983b15869dfd68f2af9a5b92b2263a
 
 
 @app_views.route('/states/<state_id>/cities', methods=['POST'],

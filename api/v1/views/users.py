@@ -30,6 +30,8 @@ def get_user_id(user_id):
 
 @app_views.route('/users/<user_id>', methods=['DELETE'])
 def delete_user(user_id):
+    if user_id is None:
+        abort(404)
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
