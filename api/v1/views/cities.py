@@ -28,7 +28,7 @@ def get_cities(city_id):
     return jsonify(city.to_dict())
 
 
-@app_views.route('cities/<city_id>', methods=['DELETE'],
+@app_views.route('/cities/<city_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_cities(city_id):
     if city_id is None:
@@ -42,7 +42,7 @@ def delete_cities(city_id):
     return jsonify({})
 
 
-@app_views.route('states/<state_id>/cities', methods=['POST'],
+@app_views.route('/states/<state_id>/cities', methods=['POST'],
                  strict_slashes=False)
 def post_citie(state_id):
     if not storage.get(State, state_id):
