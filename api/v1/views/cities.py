@@ -18,7 +18,7 @@ def get_cities_stat_id(state_id):
     dict_ = []
     for val in state.cities:
         dict_.append(val.to_dict())
-    return jsonify(dict_)
+    return (jsonify(dict_))
 
 
 @app_views.route('/cities/<city_id>', methods=['GET'],
