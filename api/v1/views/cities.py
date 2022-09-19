@@ -46,7 +46,7 @@ def delete_cities(city_id):
                  strict_slashes=False)
 def post_citie(state_id):
     if not storage.get(State, state_id):
-        abort(400)
+        abort(404)
     res = request.get_json()
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
