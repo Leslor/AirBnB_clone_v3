@@ -2,9 +2,6 @@
 """Create a new view for State objects that handles
 all default RESTFul API actions"""
 from models import storage
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
 from models.user import User
 from api.v1.views import app_views
 from flask import jsonify, abort, request
@@ -12,6 +9,7 @@ from flask import jsonify, abort, request
 
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def get_user():
+    """ """
     dict_ = []
     for val in storage.all(User).values():
         dict_.append(val.to_dict())
@@ -20,6 +18,7 @@ def get_user():
 
 @app_views.route('/users/<user_id>', methods=['GET'])
 def get_user_id(user_id):
+    """ """
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
@@ -28,14 +27,12 @@ def get_user_id(user_id):
 
 @app_views.route('/users/<user_id>', methods=['DELETE'])
 def delete_user(user_id):
-    if user_id is None:
-        abort(404)
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
     user.delete()
     storage.save()
-    return jsonify({}, 200)
+    return jsonify({}), 200
 
 
 @app_views.route('/users', methods=['POST'],
@@ -63,7 +60,7 @@ def put_user(user_id):
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
     for key, value in res.items():
-        if key not in ["id", "email", "created_at", "updated_at"]:
+        if key not in ["id", "created_at", "updated_at"]:
             setattr(user, key, value)
     storage.save()
     return jsonify(user.to_dict()), 200
