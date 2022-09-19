@@ -2,7 +2,6 @@
 """Create a new view for State objects that handles
 all default RESTFul API actions"""
 from models import storage
-from models.state import State
 from models.user import User
 from api.v1.views import app_views
 from flask import jsonify, abort, request
@@ -17,7 +16,7 @@ def get_user():
     dict_ = []
     for val in user.values():
         dict_.append(val.to_dict())
-    return jsonify(dict_)
+    return (jsonify(dict_))
 
 
 @app_views.route('/users/<user_id>', methods=['GET'])
@@ -26,7 +25,7 @@ def get_user_id(user_id):
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
-    return jsonify(user.to_dict())
+    return (jsonify(user.to_dict()))
 
 
 @app_views.route('/users/<user_id>', methods=['DELETE'])
@@ -37,7 +36,7 @@ def delete_user(user_id):
         abort(404)
     user.delete()
     storage.save()
-    return jsonify({}), 200
+    return (jsonify({}), 200)
 
 
 @app_views.route('/users', methods=['POST'],
@@ -53,7 +52,7 @@ def post_user():
         return abort(400, {'message': 'Missing password'})
     new_user = User(**res)
     new_user.save()
-    return jsonify(new_user.to_dict()), 201
+    return (jsonify(new_user.to_dict()), 201)
 
 
 @app_views.route('/user/<user_id>', methods=['PUT'],
@@ -70,4 +69,4 @@ def put_user(user_id):
         if key not in ["id", "email", "created_at", "updated_at"]:
             setattr(user, key, value)
     storage.save()
-    return jsonify(user.to_dict()), 200
+    return (jsonify(user.to_dict()), 200)
