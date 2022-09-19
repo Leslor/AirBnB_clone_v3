@@ -24,8 +24,7 @@ def get_cities_stat_id(state_id):
     if state is None:
         abort(404)
     for val in city:
-        if val.state_id == state_id:
-            dict_.append(val.to_dict())
+        dict_.append(val.to_dict())
     return jsonify(dict_)
 
 
@@ -45,15 +44,18 @@ def delete_cities(city_id):
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
-    city.delete()
-    storage.save()
+    else:
+        city.delete()
+        storage.save()
     return jsonify({})
 
 
-@app_views.route('/cities', methods=['POST'],
+@app_views.route('states/<state_id>/cities', methods=['POST'],
                  strict_slashes=False)
 def post_cities():
     res = request.get_json()
+    if not storage.get(State, state_id):
+        abort(400)
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
     if 'name' not in res:
