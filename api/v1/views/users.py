@@ -10,8 +10,11 @@ from flask import jsonify, abort, request
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def get_user():
     """ """
+    user = storage.all(User, user_id)
+    if user is None:
+        abort(404)
     dict_ = []
-    for val in storage.all(User).values():
+    for val in user.values():
         dict_.append(val.to_dict())
     return jsonify(dict_)
 
@@ -60,7 +63,7 @@ def put_user(user_id):
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
     for key, value in res.items():
-        if key not in ["id", "created_at", "updated_at"]:
+        if key not in ["id", "email", "created_at", "updated_at"]:
             setattr(user, key, value)
     storage.save()
     return jsonify(user.to_dict()), 200
