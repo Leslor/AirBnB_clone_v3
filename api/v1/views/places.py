@@ -34,7 +34,7 @@ def show_place(place_id):
                  strict_slashes=False)
 def delete_place(place_id):
     """Method that delete place object"""
-    place = storage.get(City, city_id)
+    place = storage.get(Place, place_id)
     if place is None:
         abort(404)
     else:
@@ -48,7 +48,7 @@ def delete_place(place_id):
 def post_place(city_id):
     """Method that insert place object"""
     city = storage.get(City, city_id)
-    if city None:
+    if city is None:
         abort(404)
     res = request.get_json()
     if type(res) != dict:
