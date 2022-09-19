@@ -46,9 +46,9 @@ def post_user():
     res = request.get_json()
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
-    if 'email' not in res:
+    if not res.get('email'):
         return abort(400, {'message': 'Missing email'})
-    if 'password' not in res:
+    if not res.get('password'):
         return abort(400, {'message': 'Missing password'})
     new_user = User(**res)
     new_user.save()
