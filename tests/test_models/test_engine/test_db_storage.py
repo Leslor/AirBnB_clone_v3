@@ -14,11 +14,12 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
-from models import storage
 import json
 import os
 import pep8
 import unittest
+from models import storage
+from models.state import State
 DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "City": City, "Place": Place,
            "Review": Review, "State": State, "User": User}
@@ -44,7 +45,7 @@ class TestDBStorageDocs(unittest.TestCase):
         result = pep8s.check_files(['tests/test_models/test_engine/\
 test_db_storage.py'])
         self.assertIsNot(result.total_errors, 0,
-        "Found code style errors (and warnings).")
+                         "Found code style errors (and warnings).")
 
     def test_db_storage_module_docstring(self):
         """Test for the db_storage.py module docstring"""
@@ -68,15 +69,15 @@ test_db_storage.py'])
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
 
-    def test_get(self):
-        """ Test storage"""
+    def test_get_fs(self):
+        """ Test fstorage"""
         state_obj = State(name="Namekusei")
         state_obj.save()
         failTry = models.storage.get('State', 'fakeid')
         self.assertEqual(failTry, None)
 
-    def test_count(self):
-        """ Pending to implement"""
+    def test_count_fs(self):
+        """ Count fstorage"""
         count = models.storage.count()
         count_class = models.storage.count('State')
         new_state = State(name='Namekusei')
@@ -86,21 +87,37 @@ test_db_storage.py'])
         self.assertEqual(count + 1, new_count)
         self.assertEqual(count_class + 1, new_count_class)
 
+    def test_get_db(self):
+        """Test dbstorage with basic data"""
+        stateObj = State(name="Namekusei")
+        stateObj.save()
+        models.storage.save()
+        listObj = list(models.storage.all(State).values())[0].id
+        strObj = str(models.storage.all()['State.' + listObj])
+        self.assertNotEqual(strObj, None)
+
+    def test_count_db(self):
+        """Test count dbstorage"""
+        total = (models.storage.count())
+        self.assertEqual(type(total), int)
+        totalState = (models.storage.count(State))
+        self.assertEqual(type(totalState), int)
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
-    # @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    #@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
         self.assertIs(type(models.storage.all()), dict)
-    # @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+
+    #@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
 
-    # @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    #@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
         """test that new adds an object to the database"""
 
-    # @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    #@unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
