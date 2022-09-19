@@ -3,6 +3,7 @@
 all default RESTFul API actions"""
 from models import storage
 from models.user import User
+from models.state import State
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 
@@ -44,15 +45,15 @@ def delete_user(user_id):
 def post_user():
     """Method that insert a user """
     res = request.get_json()
+    user = User(**res)
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
-    if not res.get('email'):
+    if not user.to_dict().get('email'):
         return abort(400, {'message': 'Missing email'})
-    if not res.get('password'):
+    if not user.to_dict().get('password'):
         return abort(400, {'message': 'Missing password'})
-    new_user = User(**res)
-    new_user.save()
-    return (jsonify(new_user.to_dict()), 201)
+    user.save()
+    return (jsonify(user.to_dict()), 201)
 
 
 @app_views.route('/user/<user_id>', methods=['PUT'],
