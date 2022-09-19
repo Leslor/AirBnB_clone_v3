@@ -8,14 +8,6 @@ from api.v1.views import app_views
 from flask import jsonify, abort, request
 
 
-@app_views.route('/cities', methods=['GET'], strict_slashes=False)
-def get_cities_state():
-    dict_ = []
-    for val in storage.all(City).values():
-        dict_.append(val.to_dict())
-    return jsonify(dict_)
-
-
 @app_views.route('/states/<state_id>/cities')
 def get_cities_stat_id(state_id):
     city = storage.all(City).values()
@@ -52,15 +44,16 @@ def delete_cities(city_id):
 
 @app_views.route('states/<state_id>/cities', methods=['POST'],
                  strict_slashes=False)
-def post_cities():
-    res = request.get_json()
+def post_citie(state_id):
     if not storage.get(State, state_id):
         abort(400)
+    res = request.get_json()
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
     if 'name' not in res:
         return abort(400, {'message': 'Missing name'})
     new_city = City(**res)
+    setattr(new_city, "state_id", state_id)
     new_city.save()
     return jsonify(new_city.to_dict()), 201
 
