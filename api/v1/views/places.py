@@ -58,7 +58,7 @@ def post_place(city_id):
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
-    if 'name' not in res:
+    if not res.get('name'):
         return abort(400, {'message': 'Missing name'})
     new_place = Place(**res)
     new_place.city_id = city_id

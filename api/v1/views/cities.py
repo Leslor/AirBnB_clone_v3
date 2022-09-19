@@ -28,16 +28,14 @@ def get_cities(city_id):
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
-    return jsonify(city.to_dict())
+    return (jsonify(city.to_dict()))
 
 
-@app_views.route('/cities/<string:city_id>', methods=['DELETE'],
+@app_views.route('/cities/<city_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_city(city_id):
     """Endpoint that remove a City object"""
     city = storage.get(City, city_id)
-    if city_id is None:
-        abort(404)
     if city is None:
         abort(404)
     else:
@@ -67,7 +65,7 @@ def post_citie(state_id):
     res = request.get_json()
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
-    if 'name' not in res:
+    if not res.get('name'):
         return abort(400, {'message': 'Missing name'})
     new_city = City(**res)
     new_city.state_id = state_id
