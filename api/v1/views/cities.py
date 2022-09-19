@@ -8,7 +8,7 @@ from api.v1.views import app_views
 from flask import jsonify, abort, request
 
 
-@app_views.route('/states/<state_id>/cities')
+@app_views.route('/states/<state_id>/cities', methods=['DELETE'])
 def get_cities_stat_id(state_id):
     city = storage.all(City).values()
     dict_ = []
@@ -20,7 +20,7 @@ def get_cities_stat_id(state_id):
     return jsonify(dict_)
 
 
-@app_views.route('/cities/<city_id>')
+@app_views.route('/cities/<city_id>', methods=['DELETE'])
 def get_cities(city_id):
     city = storage.get(City, city_id)
     if city is None:
