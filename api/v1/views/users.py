@@ -11,8 +11,8 @@ from flask import jsonify, abort, request
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def get_user():
     """Method that return all stored user """
-    if user is None:
     user = storage.all(User)
+    if user is None:
         abort(404)
     dict_ = []
     for val in user.values():
@@ -45,18 +45,18 @@ def delete_user(user_id):
 def post_user():
     """Method that insert a user """
     res = request.get_json()
-    user = User(**res)
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
-    if not user.to_dict().get('email'):
+    if 'email' not in res:
         return abort(400, {'message': 'Missing email'})
-    if not user.to_dict().get('password'):
+    if 'password' not in res:
         return abort(400, {'message': 'Missing password'})
+    user = User(**res)
     user.save()
     return (jsonify(user.to_dict()), 201)
 
 
-@app_views.route('/user/<user_id>', methods=['PUT'],
+@app_views.route('/users/<user_id>', methods=['PUT'],
                  strict_slashes=False)
 def put_user(user_id):
     """Method that update a user"""
