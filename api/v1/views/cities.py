@@ -44,18 +44,6 @@ def delete_city(city_id):
     return (jsonify({}), 200)
 
 
-@app_views.route('/cities/<city_id>', methods=['DELETE'],
-                 strict_slashes=False)
-def delete_cities(city_id):
-    """Endpoint that remove a City object"""
-    city = storage.get(City, city_id)
-    if city is None:
-        abort(404)
-    else:
-        city.delete()
-        storage.save()
-    return (jsonify({}), 200)
-
 @app_views.route('/states/<state_id>/cities', methods=['POST'],
                  strict_slashes=False)
 def post_citie(state_id):

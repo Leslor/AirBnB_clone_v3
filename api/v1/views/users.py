@@ -2,6 +2,7 @@
 """Create a new view for State objects that handles
 all default RESTFul API actions"""
 from models import storage
+from models.state import State
 from models.user import User
 from api.v1.views import app_views
 from flask import jsonify, abort, request
@@ -9,8 +10,8 @@ from flask import jsonify, abort, request
 
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def get_user():
-    """ """
-    user = storage.all(User, user_id)
+    """Method that return all stored user """
+    user = storage.all(User)
     if user is None:
         abort(404)
     dict_ = []
@@ -21,7 +22,7 @@ def get_user():
 
 @app_views.route('/users/<user_id>', methods=['GET'])
 def get_user_id(user_id):
-    """ """
+    """Method that return a user by id"""
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
@@ -30,8 +31,7 @@ def get_user_id(user_id):
 
 @app_views.route('/users/<user_id>', methods=['DELETE'])
 def delete_user(user_id):
-    if user_id is None:
-        abort(404)
+    """Method that delete a user"""
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
@@ -43,6 +43,7 @@ def delete_user(user_id):
 @app_views.route('/users', methods=['POST'],
                  strict_slashes=False)
 def post_user():
+    """Method that insert a user """
     res = request.get_json()
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
@@ -55,9 +56,10 @@ def post_user():
     return jsonify(new_user.to_dict()), 201
 
 
-@app_views.route('/user/<path:user_id>', methods=['PUT'],
+@app_views.route('/user/<user_id>', methods=['PUT'],
                  strict_slashes=False)
 def put_user(user_id):
+    """Method that update a user"""
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
