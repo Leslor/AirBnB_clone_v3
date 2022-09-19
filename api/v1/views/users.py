@@ -10,8 +10,8 @@ from flask import jsonify, abort, request
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def get_user():
     """Method that return all stored user """
-    user = storage.all(User)
     if user is None:
+    user = storage.all(User)
         abort(404)
     dict_ = []
     for val in user.values():
