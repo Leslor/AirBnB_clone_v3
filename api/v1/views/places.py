@@ -34,13 +34,13 @@ def show_place(place_id):
                  strict_slashes=False)
 def delete_place(place_id):
     """Method that delete place object"""
-    place = storage.get(City, city_id)
+    place = storage.get(Place, place_id)
     if place is None:
         abort(404)
     else:
         place.delete()
         storage.save()
-    return jsonify({}), 200
+    return (jsonify({}), 200)
 
 
 @app_views.route('/cities/<city_id>/places', methods=['POST'],
@@ -48,7 +48,7 @@ def delete_place(place_id):
 def post_place(city_id):
     """Method that insert place object"""
     city = storage.get(City, city_id)
-    if city None:
+    if city is None:
         abort(404)
     res = request.get_json()
     if type(res) != dict:
@@ -63,7 +63,7 @@ def post_place(city_id):
     new_place = Place(**res)
     new_place.city_id = city_id
     new_place.save()
-    return jsonify(new_place.to_dict()), 201
+    return (jsonify(new_place.to_dict()), 201)
 
 
 @app_views.route('/cities/<city_id>', methods=['PUT'],
@@ -80,4 +80,4 @@ def update_place(city_id):
         if key not in ["id", "city_id", "created_at", "updated_at"]:
             setattr(city, key, value)
     storage.save()
-    return jsonify(place.to_dict()), 200
+    return (jsonify(place.to_dict()), 200)
