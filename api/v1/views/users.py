@@ -2,6 +2,9 @@
 """Create a new view for State objects that handles
 all default RESTFul API actions"""
 from models import storage
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
 from models.user import User
 from api.v1.views import app_views
 from flask import jsonify, abort, request
@@ -15,16 +18,15 @@ def get_user():
     return jsonify(dict_)
 
 
-@app_views.route('/users/<path:user_id>')
-def get_user(user_id):
+@app_views.route('/users/<user_id>', methods=['GET'])
+def get_user_id(user_id):
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
     return jsonify(user.to_dict())
 
 
-@app_views.route('/users/<path:user_id>', methods=['DELETE'],
-                 strict_slashes=False)
+@app_views.route('/users/<user_id>', methods=['DELETE'])
 def delete_user(user_id):
     if user_id is None:
         abort(404)
@@ -33,7 +35,7 @@ def delete_user(user_id):
         abort(404)
     user.delete()
     storage.save()
-    return jsonify({})
+    return jsonify({}, 200)
 
 
 @app_views.route('/users', methods=['POST'],
@@ -44,6 +46,8 @@ def post_user():
         return abort(400, {'message': 'Not a JSON'})
     if 'email' not in res:
         return abort(400, {'message': 'Missing email'})
+    if 'password' not in res:
+        return abort(400, {'message': 'Missing password'})
     new_user = User(**res)
     new_user.save()
     return jsonify(new_user.to_dict()), 201
