@@ -15,10 +15,7 @@ def review_by_place(place_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
-    dict_ = []
-    for review in place.reviews:
-        dict_.append(review.to_dict())
-    return jsonify(dict_)
+    return jsonify([review.to_dict() for review in place.reviews])
 
 
 @app_views.route("/reviews/<review_id>", methods=["GET"],
@@ -57,7 +54,7 @@ def insert_review(place_id):
         abort(400, description="Missing user_id")
     res['place_id'] = place_id
     user = storage.get(User, res.get('user_id'))
-    if review is None:
+    if user is None:
         abort(404)
     if not res.get("text"):
         abort(400, description="Missing text")
@@ -78,8 +75,8 @@ def update_review(review_id):
     if type(res) != dict:
         abort(400, description="Not a JSON")
     for key, value in res.items():
-        if key not in
-        ["id", "user_id", "place_id", "created_at", "updated_at"]:
+        if key not in ["id", "user_id", "place_id",
+                       "created_at", "updated_at"]:
             setattr(review, key, value)
     storage.save()
     return (jsonify(review.to_dict()), 200)
