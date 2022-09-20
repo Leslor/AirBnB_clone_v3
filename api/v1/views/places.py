@@ -58,7 +58,7 @@ def post_place(city_id):
         return abort(400, {'message': 'Not a JSON'})
     if not res.get('user_id'):
         return abort(400, {'message': 'Missing user_id'})
-    user = storage.get(User, user_id)
+    user = storage.get(User, res.get('user_id'))
     if user is None:
         abort(404)
     if not res.get('name'):
