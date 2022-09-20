@@ -21,7 +21,7 @@ def place_by_city(city_id):
     dict_ = []
     for place in city.places:
         dict_.append(place.to_dict())
-    return jsonify(dict_)
+    return (jsonify(dict_))
 
 
 @app_views.route('/places/<place_id>', methods=['GET'])
@@ -30,7 +30,7 @@ def show_place(place_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
-    return jsonify(place.to_dict())
+    return (jsonify(place.to_dict()))
 
 
 @app_views.route('/places/<place_id>', methods=['DELETE'],
@@ -80,7 +80,7 @@ def update_place(place_id):
     if type(res) != dict:
         return abort(400, {'message': 'Not a JSON'})
     for key, value in res.items():
-        if key not in ["id", "city_id", "created_at", "updated_at"]:
-            setattr(city, key, value)
+        if key not in ["id", "user_id", "city_id", "created_at", "updated_at"]:
+            setattr(place, key, value)
     storage.save()
     return (jsonify(place.to_dict()), 200)
